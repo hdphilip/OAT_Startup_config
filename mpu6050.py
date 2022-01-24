@@ -1,13 +1,9 @@
 #!/usr/bin/env python3
 
 
-# cd start/python3 mpu3.py
-
-
 import smbus
 import math
 import time
-
 
 
 # Power management registers
@@ -53,7 +49,6 @@ bus.write_byte_data(address, REG_PWR_MGMT_1 , 0)  # Now wake the 6050 up as it s
 bus.write_byte_data(address, REG_CONFIG , 6)      # Reduce BW to 5HZ 
  
 
-
 accel_xout = read_word_2c(0x3b)
 accel_yout = read_word_2c(0x3d)
 accel_zout = read_word_2c(0x3f)
@@ -71,11 +66,9 @@ Yang = Yang + 2.3  # RA calibration error
 Xa = "%.1f" %Xang
 Ya = "%.1f" %Yang
    
- 
-   # print ("Xangle=%.1f" %Xangle , "Yangle=%.1f" %Yangle)
+
 print (Xa,Ya)
   
-#time.sleep(0.25)
 
 
 

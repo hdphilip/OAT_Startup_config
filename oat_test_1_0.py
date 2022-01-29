@@ -11,8 +11,7 @@ target_DEC = 40
 target_RA  = 0
 DEC_steps_per_degree = 314.2
 RA_steps_per_degree = 314.2
-#steps = 1.2
-#Ya = 13.0
+
 
 print("COM port set to /dev/ttyUSB0")
 print("Disabling #DTR for /dev/ttyUSB0")
@@ -21,7 +20,6 @@ os.system('stty -F /dev/ttyUSB0 -hupcl')
 print("Opening serial port on " + serialport + '...')
 ser = serial.Serial(serialport, 19200, timeout = 1)
 time.sleep(1)#wait for reboot
-
 
 #//////////////////////////
 # RA Alignment
@@ -38,7 +36,7 @@ RA_steps = "%.1f" %RA_steps # Cleans up the display
 
 print ("\n Current RA angle Before Adjustment " +str(Xa) + " Degrees")
 print ("\n Target RA angle - Current angle " + str(RA_error) + "   Degrees" )
-print ("\n Steps per Degrees  " + str(RA_steps_per_degree))
+print ("\n RA Steps per Degrees  " + str(RA_steps_per_degree))
 print ("\n Steps to reach Goal " + str(RA_steps))
 
 move_RA_stepper = (':MXr' + str(RA_steps) + '#') # configures the Measde command
@@ -50,9 +48,6 @@ if int(response_utf) == 1:
     print('\n RA successfully Homed!')
 else: print('\n Could not Home RA...')
 time.sleep(7)  # wait for Dec to complete it's move
-
-importlib.reload(sys.modules.get('mpu6050', sys))  # Display new RA and DEC values
-
 
 #//////////////////////////
 # Dec Alignment
@@ -69,7 +64,7 @@ dec_steps = "%.1f" %dec_steps # Cleans up the display
 
 print ("\n Current Dec angle Before Adjustment " +str(Ya) + " Degrees")
 print ("\n Target Dec angle - Current angle " + str(dec_error) + "   Degrees" )
-print ("\n Steps per Degrees  " + str(DEC_steps_per_degree))
+print ("\n DEC Steps per Degrees  " + str(DEC_steps_per_degree))
 print ("\n Steps to reach Goal " + str(dec_steps))
 
 move_dec_stepper = (':MXd' + str(dec_steps) + '#')
@@ -83,18 +78,6 @@ else: print('\n Could not Home DEC...')
 time.sleep(15)  # wait for Dec to complete it's move
 
 importlib.reload(sys.modules.get('mpu6050', sys))  # Display new RA and DEC values
-
-#///////////////////////////////////
-#  Turn Tracking Off
-#///////////////////////////////////
-time.sleep(5)  #wait for reboot
-ser.write(str.encode(':MT0#'))
-response = ser.readline()
-response_utf = (response.decode('utf-8'))
-if (response_utf) == ('1') :
-    print('\n OAT Tracking should be OFF...')
-else:  print(str(response_utf) + 'Problems with Turning Tracking off')
-
 
 #////////////////////////////////////
 # Stop and exit
